@@ -14,6 +14,7 @@ import {
   X,
   User,
   Building,
+  Zap,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { UserButton, useUser } from "@clerk/nextjs";
@@ -60,6 +61,11 @@ export function Sidebar() {
       name: "Perfil do Negocio",
       href: "/dashboard/cadastro",
       icon: <Building className="h-5 w-5" />,
+    },
+            {
+      name: "Whatsapp",
+      href: "/dashboard/whatsapp",
+      icon: <Zap className="h-5 w-5" />,
     },
   ];
 
