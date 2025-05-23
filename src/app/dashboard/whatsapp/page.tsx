@@ -176,7 +176,7 @@ export default function WhatsAppConnection() {
                   </Badge>
                 )}
                 <Badge
-                //@ts-expect-error
+                  //@ts-expect-error
                   variant={
                     connectionStatus === "connected"
                       ? "success"
@@ -654,65 +654,6 @@ export default function WhatsAppConnection() {
             </TabsContent>
           </Tabs>
         )}
-
-        {/* Help Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Qual método escolher?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div>
-                <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Building2 className="h-4 w-4 text-blue-600" />
-                  WhatsApp Business API (Oficial)
-                </h4>
-                <div className="space-y-2 text-sm text-gray-600">
-                  <p>
-                    <strong>Ideal para:</strong> Empresas grandes, alto volume
-                    de mensagens, recursos empresariais avançados.
-                  </p>
-                  <p>
-                    <strong>Requisitos:</strong> Aprovação do Meta, configuração
-                    técnica avançada, custos mensais.
-                  </p>
-                  <p>
-                    <strong>Benefícios:</strong> Suporte oficial, alta
-                    confiabilidade, recursos completos para empresas.
-                  </p>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-green-600" />
-                  Evolution API
-                </h4>
-                <div className="space-y-2 text-sm text-gray-600">
-                  <p>
-                    <strong>Ideal para:</strong> PMEs, startups, prototipagem
-                    rápida, orçamento limitado.
-                  </p>
-                  <p>
-                    <strong>Requisitos:</strong> Servidor próprio ou hospedado,
-                    configuração básica.
-                  </p>
-                  <p>
-                    <strong>Benefícios:</strong> Configuração imediata, sem
-                    custos do Meta, flexibilidade total.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex gap-2 pt-4 border-t mt-6">
-              <Button variant="outline" size="sm">
-                Ver Documentação
-              </Button>
-              <Button variant="outline" size="sm">
-                Contatar Suporte
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
