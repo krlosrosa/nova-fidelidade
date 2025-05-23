@@ -6,6 +6,8 @@ COPY . .
 RUN npm install --legacy-peer-deps
 RUN npm run build
 
+
+
 # Estágio de produção
 FROM node:22-slim AS runner
 WORKDIR /app
