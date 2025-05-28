@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/utils";
 import { SubscriptionPlanDetails } from "./_components/subscription-plan-details";
 import { BillingHistory } from "./_components/billing-history";
 import { UpgradePlanCard } from "./_components/upgrade-plan-card";
-import { Download, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useBillingHistory } from "./hooks/useBillingHistory";
 import { useSubscriptionPlan } from "./hooks/useSubscriptionPlan";
 import { redirectToStripePortal } from "./hooks/useStripePortal";
@@ -47,6 +47,7 @@ const availablePlans = [
       "Suporte por email",
     ],
     recommended: false,
+    priceId: "price_1RMvqbPOQetwSPfGUN25w2SG",
   },
   {
     id: "pro",
@@ -60,6 +61,7 @@ const availablePlans = [
       "Suporte prioritário",
     ],
     recommended: true,
+    priceId: "price_1RMvqNPOQetwSPfGTiF7Z4SM",
   },
   {
     id: "enterprise",
@@ -74,55 +76,18 @@ const availablePlans = [
       "Domínio personalizado",
     ],
     recommended: false,
-  },
-];
-
-// Mock de histórico de pagamentos
-const billingHistory = [
-    {
-    id: "inv_005",
-    date: new Date("2023-10-15"),
-    amount: "R$ 0,00",
-    status: "paid",
-    invoiceUrl: "#",
-  },
-  {
-    id: "inv_001",
-    date: new Date("2023-10-15"),
-    amount: "R$ 197,00",
-    status: "paid",
-    invoiceUrl: "#",
-  },
-  {
-    id: "inv_002",
-    date: new Date("2023-09-15"),
-    amount: "R$ 197,00",
-    status: "paid",
-    invoiceUrl: "#",
-  },
-  {
-    id: "inv_003",
-    date: new Date("2023-08-15"),
-    amount: "R$ 97,00",
-    status: "paid",
-    invoiceUrl: "#",
+    priceId: "price_1RMvpyPOQetwSPfG25deGtV7",
   },
 ];
 
 export default function SubscriptionPage() {
-  const currentPlan = availablePlans.find(
-    (plan) => plan.id === currentBusiness.subscription_plan
-  );
-
-  const customerId = 'cus_SHWdSNlVx7mHKf'
+  const customerId = "cus_SNxc5y5qvBaqk1";
 
   const { data: invoices } = useBillingHistory(customerId);
   const { data: plan } = useSubscriptionPlan(customerId);
 
-  console.log(plan)
-
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-8">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight">Assinatura</h1>
         {currentBusiness.subscription_status === "trialing" && (
@@ -139,10 +104,7 @@ export default function SubscriptionPage() {
             <CardTitle>Seu Plano Atual</CardTitle>
           </CardHeader>
           <CardContent>
-            <SubscriptionPlanDetails 
-              plan={plan} 
-              status={plan?.status} 
-            />
+            <SubscriptionPlanDetails plan={plan} status={plan?.status} />
           </CardContent>
         </Card>
 
@@ -152,9 +114,9 @@ export default function SubscriptionPage() {
             <CardTitle>Atualizar Plano</CardTitle>
           </CardHeader>
           <CardContent>
-            <UpgradePlanCard 
-              currentPlan={currentBusiness.subscription_plan} 
-              plans={availablePlans} 
+            <UpgradePlanCard
+              currentPlan={currentBusiness.subscription_plan}
+              plans={availablePlans}
             />
           </CardContent>
         </Card>
@@ -166,7 +128,11 @@ export default function SubscriptionPage() {
           </CardHeader>
           <CardContent className="flex flex-col space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0">
             {currentBusiness.subscription_status === "active" && (
-              <Button onClick={() => redirectToStripePortal(customerId)} variant="outline" className="w-full sm:w-auto text-destructive">
+              <Button
+                onClick={() => redirectToStripePortal(customerId)}
+                variant="outline"
+                className="w-full sm:w-auto text-destructive"
+              >
                 <X className="mr-2 h-4 w-4" />
                 Cancelar Assinatura
               </Button>

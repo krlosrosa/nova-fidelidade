@@ -26,7 +26,6 @@ export function SupportForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     // Lógica para enviar o formulário
   }
 

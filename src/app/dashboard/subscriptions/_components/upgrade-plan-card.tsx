@@ -1,14 +1,51 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { loadStripe } from "@stripe/stripe-js";
 import { Check } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
-export function UpgradePlanCard({ currentPlan, plans }: { currentPlan: string; plans: any[] }) {
+export function UpgradePlanCard({
+  currentPlan,
+  plans,
+}: {
+  currentPlan: string;
+  plans: any[];
+}) {
+  const { user } = useUser();
+
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
+
+  async function handleCheckout(priceId: string) {
+    if (user) {
+      const res = await fetch("/api/checkout/session", {
+        method: "POST",
+        body: JSON.stringify({ priceId, referenceId: user.id, customerId: 'cus_SNxc5y5qvBaqk1' }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+
+      const stripe = await stripePromise;
+
+      if (stripe) {
+        await stripe.redirectToCheckout({ sessionId: data.id });
+      }
+    }
+  }
+
   return (
     <div className="space-y-6">
       <p className="text-sm text-muted-foreground">
         Escolha o plano que melhor atende às necessidades do seu negócio.
       </p>
-      
+
       <div className="grid gap-6 md:grid-cols-4">
         {plans.map((plan) => (
           <Card
@@ -37,11 +74,12 @@ export function UpgradePlanCard({ currentPlan, plans }: { currentPlan: string; p
                   </li>
                 ))}
               </ul>
-              
+
               <Button
                 variant={plan.id === currentPlan ? "outline" : "default"}
                 className="w-full"
                 disabled={plan.id === currentPlan}
+                onClick={() => handleCheckout(plan.priceId)}
               >
                 {plan.id === currentPlan ? "Plano Atual" : "Selecionar"}
               </Button>

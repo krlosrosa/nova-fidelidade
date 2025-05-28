@@ -21,7 +21,6 @@ export async function GET(req: Request) {
   });
 
   const subscription = subscriptions.data[0];
-  console.log(subscription)
 
   if (!subscription) {
     return NextResponse.json({ error: "No subscription found" }, { status: 404 });

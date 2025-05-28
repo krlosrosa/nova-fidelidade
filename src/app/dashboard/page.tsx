@@ -26,6 +26,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { formatLastVisit } from "./formatLastVisit"
+import { useTenantStore } from "../store/user-info"
 
 // Dados mockados
 const revenueData = [
@@ -96,6 +97,9 @@ const recentRewards = [
 
 export default function Dashboard() {
   
+  const {tenant}  = useTenantStore()
+
+
   return (
     <div className="flex min-h-screen w-full bg-gray-50">
       {/* Main Content */}

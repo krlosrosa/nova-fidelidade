@@ -6,6 +6,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { Sidebar } from "@/components/sideBar";
 import { ToastContainer } from "react-toastify";
 import Providers from "@/providers/reactquery";
+import { ChatwootWidget } from "@/components/chatwoot";
+import CurrectUSerProvider from "@/providers/currectUser";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,10 +36,13 @@ export default function RootLayout({
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased flex`}
           >
-            <div className="flex flex-col min-w-full md:flex-row min-h-screen">
-              <Sidebar />
-              {children}
-            </div>
+            <CurrectUSerProvider>
+              <div className="flex flex-col min-w-full md:flex-row min-h-screen">
+                <Sidebar />
+                {children}
+                <ChatwootWidget />
+              </div>
+            </CurrectUSerProvider>
           </body>
         </html>
         <Toaster />

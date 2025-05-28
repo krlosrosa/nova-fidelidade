@@ -18,12 +18,16 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { UserButton, useUser } from "@clerk/nextjs";
+import { useTenantStore } from "@/app/store/user-info";
+import Image from "next/image";
 
 export function Sidebar() {
   const pathname = usePathname();
   const { user } = useUser();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+
+  const { tenant } = useTenantStore();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -52,17 +56,17 @@ export function Sidebar() {
       href: "/dashboard/pontos",
       icon: <Gift className="h-5 w-5" />,
     },
-        {
+    {
       name: "Minha assinatura",
       href: "/dashboard/subscriptions",
       icon: <CreditCard className="h-5 w-5" />,
     },
-        {
+    {
       name: "Perfil do Negocio",
       href: "/dashboard/cadastro",
       icon: <Building className="h-5 w-5" />,
     },
-            {
+    {
       name: "Whatsapp",
       href: "/dashboard/whatsapp",
       icon: <Zap className="h-5 w-5" />,
@@ -70,7 +74,7 @@ export function Sidebar() {
   ];
 
   const secondaryItems = [
-        {
+    {
       name: "Meu Perfil",
       href: "/dashboard/profile",
       icon: <User className="h-5 w-5" />,
@@ -128,19 +132,21 @@ export function Sidebar() {
   return (
     <>
       {/* Header Mobile */}
-      <div className="md:hidden flex h-14 items-center border-b px-4 sticky top-0 bg-background z-30 justify-between">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
-          <Gift className="h-6 w-6 text-primary" />
-          <span className="text-lg">Fideliza</span>
-        </Link>
-        <button
-          onClick={toggleSidebar}
-          className="p-2 rounded-md hover:bg-muted"
-          aria-label="Toggle Menu"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
-      </div>
+      {tenant?.role === "ADMIN" && (
+        <div className="md:hidden flex h-14 items-center border-b px-4 sticky top-0 bg-background z-30 justify-between">
+          <Link href="/" className="flex items-center gap-2 font-semibold">
+            <Gift className="h-6 w-6 text-primary" />
+            <span className="text-lg">Fideliza</span>
+          </Link>
+          <button
+            onClick={toggleSidebar}
+            className="p-2 rounded-md hover:bg-muted"
+            aria-label="Toggle Menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
+      )}
 
       {/* Mobile Sidebar (Overlay) */}
       {isOpen && (
@@ -196,38 +202,42 @@ export function Sidebar() {
       )}
 
       {/* Desktop Sidebar */}
-      <div className="hidden border-r bg-muted/40 md:block h-screen sticky top-0">
-        <div className="flex h-full max-h-screen flex-col gap-2">
-          {/* Logo/Cabeçalho */}
-          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Link href="/" className="flex items-center gap-2 font-semibold">
-              <Gift className="h-6 w-6 text-primary" />
-              <span className="text-lg">Fideliza</span>
-            </Link>
-          </div>
-          {/* Navegação principal */}
-          <div className="flex-1 bg-red px-3 py-4">
-            <NavItems onClick={() => {}} />
-          </div>
+      {tenant?.role === "ADMIN" && (
+        <div className="hidden border-r bg-muted/40 md:block h-screen sticky top-0">
+          <div className="flex h-full max-h-screen flex-col gap-2">
+            {/* Logo/Cabeçalho */}
+            <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+              <Link href="/" className="flex items-center gap-2 font-semibold">
+                <Gift className="h-6 w-6 text-primary" />
+                <span className="text-lg">Fideliza</span>
+              </Link>
+            </div>
+            {/* Navegação principal */}
+            <div className="flex-1 bg-red px-3 py-4">
+              <NavItems onClick={() => {}} />
+            </div>
 
-          {/* Perfil do usuário */}
-          <div className="mt-auto p-4 border-t">
-            <div className="flex items-center gap-4">
-              <Avatar className="h-9 w-9">
-                <AvatarImage src={user?.imageUrl} alt="Avatar" />
-                <AvatarFallback>US</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{user?.fullName}</p>
-                <p className="text-xs text-muted-foreground truncate">
-                  {user?.primaryEmailAddress?.emailAddress}
-                </p>
+            {/* Perfil do usuário */}
+            <div className="mt-auto p-4 border-t">
+              <div className="flex items-center gap-4">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src={user?.imageUrl} alt="Avatar" />
+                  <AvatarFallback>US</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">
+                    {user?.fullName}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {user?.primaryEmailAddress?.emailAddress}
+                  </p>
+                </div>
+                <UserButton />
               </div>
-              <UserButton />
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
